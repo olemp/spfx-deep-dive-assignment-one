@@ -20,7 +20,7 @@ jobs:
     steps:
     # Checkout code
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v1
       
     # Setup node.js runtime
     - name: Use Node.js 10.x
