@@ -5,12 +5,7 @@ name: spfxDeepDiveAssignmentOneCI
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
 on:
-  workflow_dispatch: 
-  push:
-    branches:
-      - spfx-assignment-one-first-iteration
-      - dev
-      - betaRelease
+  workflow_dispatch:
   
 # Variables that are available for all the jobs in the workflow
 env:
