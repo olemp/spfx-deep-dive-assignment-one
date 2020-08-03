@@ -8,7 +8,7 @@ on: push
   
 # Variables that are available for all the jobs in the workflow
 env:
-  SPPKG_FILE_NAME: 'spfx-one-deep-dive-assignment.sppkg'
+  SPPKG_FILE_NAME: 'spfx-read-write-operations.sppkg'
   SEND_MAIL: 'true'
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -47,14 +47,14 @@ jobs:
     - name: Office 365 CLI Login
       uses: pnp/action-cli-login@v1.0.0
       with:
-        ADMIN_USERNAME:  ${{ secrets.adminUsername }}
-        ADMIN_PASSWORD:  ${{ secrets.adminPassword }}
+        ADMIN_USERNAME:  ${{secrets.adminUsername}}
+        ADMIN_PASSWORD:  ${{secrets.adminPassword}}
     
     # Deploy package to tenant using action-cli-deploy
     - name: Office 365 CLI Deploy
       uses: pnp/action-cli-deploy@v1.0.0
       with:
-        APP_FILE_PATH: sharepoint/solution/${{ env.SPPKG_FILE_NAME }}
+        APP_FILE_PATH: sharepoint/solution/${{env.SPPKG_FILE_NAME}}
         # SKIP_FEATURE_DEPLOYMENT: true
         # OVERWRITE: true
     
