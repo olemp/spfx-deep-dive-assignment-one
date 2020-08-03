@@ -8,24 +8,61 @@ on:
   push:
     branches: [ spfx-assignment-one-first-iteration ]
 
+# Variables that are available for all the jobs in the workflow
+env:
+  SPPKG_FILE_NAME: 'spfx-read-write-operations.sppkg'
+  SEND_MAIL: 'true'
+
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  # This workflow contains a single job called "build and deploy"  
+   build-and-deploy:
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
+    
     steps:
-    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-    - uses: actions/checkout@v2
-
-    # Runs a single command using the runners shell
-    - name: Run a one-line script
-      run: echo Hello, world!
-
-    # Runs a set of commands using the runners shell
-    - name: Run a multi-line script
+    # Checkout code
+    - name: Checkout code
+      uses: actions/checkout@v1
+      
+    # Setup node.js runtime
+    - name: Use Node.js 10.x
+      uses: actions/setup-node@v1
+      with:
+        node-version: 10.x
+    
+    # npm install
+    - name: Run npm ci
+      run: npm ci
+    
+    # install gulp if mac
+    - name: Run npm i -g gulp
+      run: npm i -g gulp
+      if: runner.os == 'macOS'
+    
+    # gulp bundle and package solution
+    - name: Bundle and package
       run: |
-        echo Add other actions to build,
-        echo test, and deploy your project.
+        gulp bundle --ship
+        gulp package-solution --ship    
+    
+    # Login to tenant using action-cli-login
+    - name: Office 365 CLI Login
+      uses: pnp/action-cli-login@v1.0.0
+      with:
+        ADMIN_USERNAME:${{secrets.adminUsername}}
+        ADMIN_PASSWORD:${{secrets.adminPassword}}
+    
+    # Deploy package to tenant using action-cli-deploy
+    - name: Office 365 CLI Deploy
+      uses: pnp/action-cli-deploy@v1.0.0
+      with:
+        APP_FILE_PATH: sharepoint/solution/${{env.SPPKG_FILE_NAME}}
+        # SKIP_FEATURE_DEPLOYMENT: true
+        # OVERWRITE: true
+    
+    # Send an email using action-cli-runscript
+    - name: Office 365 CLI Send email
+      uses: pnp/action-cli-runscript@v1.0.0
+      with:
+         O365_CLI_SCRIPT: o365 spo mail send --webUrl https://bhavyamsdnlego.sharepoint.com/sites/OneWayOfModernPOC --to 'bhavya.chhabra@bhavyamsdnlego.onmicrosoft.com' --subject 'Deployment done' --body '<h2>Office 365 CLI</h2> <p>The deployment is complete.</p> <br/> Email sent via Office 365 CLI GitHub Action.'
+      if: env.SEND_MAIL == 'true'
