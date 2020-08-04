@@ -16,6 +16,7 @@ function AddInstall-ApptoSite() {
          
         try{        
         
+		    Write-Output "Adding app in site collection app catalog ...."
             ##Add package file to app catalog        
 
             $App = Add-PnPApp -Path $packageFilePath -Scope Site -Publish -Overwrite  -ErrorAction Stop 
@@ -53,15 +54,28 @@ function AddInstall-ApptoSite() {
 
 
 try{
-        Install-Module -Name SharePointPnPPowerShellOnline -Force -Scope CurrentUser
+        Install-Module -Name SharePointPnPPowerShellOnline -Force -Verbose -Scope CurrentUser
        
         Write-Output "Starting deploying app on Site - "$SiteUrl
+		
+		Write-Output "Site url passed to script: "$SiteUrl
+		Write-Output "Package file path passed to script: "$packageFilePath,
+		Write-Output "App name passed to script: "$appName
+		Write-Output "Username passed to script: "$username
+		Write-Output "Password passed to script: "$password
 
         $encpassword = convertto-securestring -String $password -AsPlainText -Force
-        $cred = new-object -typename System.Management.Automation.PSCredential -argumentlist $username, $encpassword                 
+        $cred = new-object -typename System.Management.Automation.PSCredential -argumentlist $username, $encpassword
 
+        Write-Output "Credentials Created...."
+		
+		Write-Output "Connecting to site...."
+		
         Connect-PnPOnline -Url $SiteUrl  -Credentials $cred -ErrorAction Stop 
-        AddInstall-ApptoSite -siteUrl $SiteUrl -packageFilePath $packageFilePath -appName $appName           
+		
+		Write-Output "Installing app on site...."
+        AddInstall-ApptoSite -siteUrl $SiteUrl -packageFilePath $packageFilePath -appName $appName   
+        
         Disconnect-PnPOnline                
    
 }
