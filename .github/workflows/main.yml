@@ -90,31 +90,9 @@ jobs:
         name: deploymentScript 
         path: deploymentScript
         
-    - name: Echo package download path
+    - name: Print package download path
       run: echo ${{steps.packageDownloadStep.outputs.download-path}}    
         
-    - name: Install PnP Powershell and Deploy App on Site using PnP Powershell
-      run: deploymentScript/${{env.DEPLOYMENT_SCRIPT}} -SiteUrl ${{env.SITE_URL}} -packageFilePath ${{steps.packageDownloadStep.outputs.download-path}}\${{env.SPPKG_FILE_NAME}} -appName ${{env.APP_NAME}} -username "vendor1@bhavyamsdnlego.onmicrosoft.com" -password "Hcl@1235"
-      shell: powershell        
-    
-    # Login to tenant using action-cli-login
-    #- name: Office 365 CLI Login
-    #  uses: pnp/action-cli-login@v1.0.0
-    #  with:
-    #    ADMIN_USERNAME: ${{secrets.ADMINUSERNAME}}
-    #    ADMIN_PASSWORD: ${{secrets.ADMINPASSWORD}}
-    
-    # Deploy package to tenant using action-cli-deploy
-    #- name: Office 365 CLI Deploy
-    #  uses: pnp/action-cli-deploy@v1.0.0
-    #  with:
-    #    APP_FILE_PATH: sharepoint/solution/${{env.SPPKG_FILE_NAME}}
-        # SKIP_FEATURE_DEPLOYMENT: true
-        # OVERWRITE: true
-    
-    # Send an email using action-cli-runscript
-    #- name: Office 365 CLI Send email
-    #  uses: pnp/action-cli-runscript@v1.0.0
-    #  with:
-    #     O365_CLI_SCRIPT: o365 spo mail send --webUrl https://bhavyamsdnlego.sharepoint.com/sites/OneWayOfModernPOC --to 'bhavya.chhabra@bhavyamsdnlego.onmicrosoft.com' --subject 'Deployment done' --body '<h2>Office 365 CLI</h2> <p>The deployment is complete.</p> <br/> Email sent via Office 365 CLI GitHub Action.'
-    #  if: env.SEND_MAIL == 'true'
+    - name: Run script to install PnP Powershell and deploy app on site using PnP Powershell
+      run: deploymentScript/${{env.DEPLOYMENT_SCRIPT}} -SiteUrl ${{env.SITE_URL}} -packageFilePath ${{steps.packageDownloadStep.outputs.download-path}}\${{env.SPPKG_FILE_NAME}} -appName ${{env.APP_NAME}} -username ${{secrets.SITECOLLADMINUSERNAME}} -password ${{secrets.SITECOLLADMINPASSWORD}}
+      shell: powershell

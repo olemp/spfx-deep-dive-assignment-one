@@ -24,8 +24,8 @@ function AddInstall-ApptoSite() {
             if($App)
             {
                 Write-Output "App successfully added in site collection app catalog "               
-
-                $chkAppInstalled = Get-PnPApp -Scope Site | ? {$_.Title -eq $appName}
+                
+                $chkAppInstalled = Get-PnPApp -Scope Site | ? {$_.Title -eq $appName} | ? {$_.InstalledVersion -ne $null}
                 #checking if app is already installed on site. 
                 
                 if($chkAppInstalled -eq $null)
@@ -52,32 +52,15 @@ function AddInstall-ApptoSite() {
 }
 
 
-
 try{
-        Install-Module -Name SharePointPnPPowerShellOnline -Force -Verbose -Scope CurrentUser
-       
-        Write-Output "Starting deploying app on Site - "$SiteUrl
-		
-		Write-Output "Site url passed to script: "$SiteUrl
-		Write-Output "Package file path passed to script: "$packageFilePath,
-		Write-Output "App name passed to script: "$appName
-		Write-Output "Username passed to script: "$username
-		Write-Output "Password passed to script: "$password
-
+        Install-Module -Name SharePointPnPPowerShellOnline -Force -Verbose -Scope CurrentUser              
         $encpassword = convertto-securestring -String $password -AsPlainText -Force
         $cred = new-object -typename System.Management.Automation.PSCredential -argumentlist $username, $encpassword
-
-        Write-Output "Credentials Created...."
-		
-		Write-Output "Connecting to site...."
-		
-        Connect-PnPOnline -Url $SiteUrl  -Credentials $cred -ErrorAction Stop 
-		
-		Write-Output "Installing app on site...."
-        AddInstall-ApptoSite -siteUrl $SiteUrl -packageFilePath $packageFilePath -appName $appName   
-        
-        Disconnect-PnPOnline                
-   
+        Write-Output "Connecting to site...."       
+        Connect-PnPOnline -Url $SiteUrl  -Credentials $cred -ErrorAction Stop
+        Write-Output "Connection created, installing app on site...."		
+        AddInstall-ApptoSite -siteUrl $SiteUrl -packageFilePath $packageFilePath -appName $appName           
+        Disconnect-PnPOnline   
 }
 catch{
     Write-Output "Error in Deploying App:  $_.Exception.Message"
