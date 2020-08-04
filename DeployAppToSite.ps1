@@ -53,7 +53,7 @@ function AddInstall-ApptoSite() {
 
 
 try{
-        Install-Module -Name SharePointPnPPowerShellOnline -Force -Verbose -Scope CurrentUser
+        Install-Module -Name SharePointPnPPowerShellOnline -Force -Scope CurrentUser
        
         Write-Output "Starting deploying app on Site - "$SiteUrl
 
