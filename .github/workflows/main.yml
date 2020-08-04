@@ -78,17 +78,23 @@ jobs:
     steps:
     
     - name: Download package (sppkg file)
-      uses: actions/download-artifact@v1
+      uses: actions/download-artifact@v2
+      id: packageDownloadStep
       with:
         name: buildPackage
+        path: buildPackage
         
     - name: Download deployment script (ps1 file)
-      uses: actions/download-artifact@v1
+      uses: actions/download-artifact@v2
       with:
-        name: deploymentScript    
+        name: deploymentScript 
+        path: deploymentScript
+        
+    - name: Echo package download path
+      run: echo ${{steps.packageDownloadStep.outputs.download-path}}    
         
     - name: Install PnP Powershell and Deploy App on Site using PnP Powershell
-      run: deploymentScript/${{env.DEPLOYMENT_SCRIPT}} -SiteUrl ${{env.SITE_URL}} -packageFilePath buildPackage/${{env.SPPKG_FILE_NAME}} -appName ${{env.APP_NAME}} -username ${{secrets.ADMINUSERNAME}} -password ${{secrets.ADMINPASSWORD}}
+      run: deploymentScript/${{env.DEPLOYMENT_SCRIPT}} -SiteUrl ${{env.SITE_URL}} -packageFilePath ${{steps.packageDownloadStep.outputs.download-path}}\${{env.SPPKG_FILE_NAME}} -appName ${{env.APP_NAME}} -username "vendor1@bhavyamsdnlego.onmicrosoft.com" -password "Hcl@1235"
       shell: pwsh        
     
     # Login to tenant using action-cli-login
