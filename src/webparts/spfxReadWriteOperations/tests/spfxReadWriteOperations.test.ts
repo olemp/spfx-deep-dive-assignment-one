@@ -18,6 +18,6 @@ describe('SpfxReadWriteOperations tests', () => {
 
   it('should return the correct result 2', () => {  
     // Assert  
-    expect(1-1).toBe(2);    
+    expect(1-1).toBe(0);    
   }); 
 });
