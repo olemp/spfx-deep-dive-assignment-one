@@ -54,7 +54,7 @@ export default class SpfxReadWriteOperations extends React.Component<ISpfxReadWr
       <div className={styles.spfxReadWriteOperations}>
         <div className={styles.container}>
           <div className={styles.row}>
-            <div className={styles.column}>
+            <div className={styles.column}>            
               <span className={styles.subTitle}>
                 SharePoint Deep Dive Assignment SPFX - 1
               </span>

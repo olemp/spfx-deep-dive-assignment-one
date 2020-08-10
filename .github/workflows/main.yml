@@ -68,7 +68,14 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: deploymentScript
-        path: ${{env.DEPLOYMENT_SCRIPT}}          
+        path: ${{env.DEPLOYMENT_SCRIPT}}  
+        
+    # upload jest code coverage report    
+    - name: Upload jest output
+      uses: actions/upload-artifact@v2
+      with:
+        name: jestOutput
+        path: jest/*
    
    # deploy job 
    deploy:

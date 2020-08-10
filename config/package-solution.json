@@ -3,7 +3,7 @@
   "solution": {
     "name": "spfx-read-write-operations4",
     "id": "b171402f-22ef-48f5-80a1-84a4fd0cb9d1",
-    "version": "1.0.0.1",
+    "version": "1.0.0.2",
     "includeClientSideAssets": true,
     "isDomainIsolated": false
   },
